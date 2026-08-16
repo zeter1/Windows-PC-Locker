@@ -1,0 +1,31 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Build output
+build/
+dist/
+
+# Runtime data created next to the application
+Настройки программы/
+Логи проблем/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# IDE / editor
+.vscode/
+.idea/
+
+# OS metadata
+Thumbs.db
+Desktop.ini
+.DS_Store
