@@ -128,3 +128,7 @@ The repository includes a Windows GitHub Actions workflow that performs:
 Current application version: **2.3 SAFE**
 
 The application has been manually tested on Windows for its normal lock/unlock workflow. GitHub Actions provides additional automated syntax and self-test verification, but it cannot reproduce every real desktop power-management configuration.
+
+## License
+
+No open-source license is currently granted. The source code is published for portfolio and code-review purposes.
