@@ -1,81 +1,81 @@
 # Windows PC Locker
 
-A lightweight Windows utility that locks the current Windows session while allowing background tasks to continue running.
+Лёгкая утилита для Windows, которая блокирует текущий сеанс Windows, позволяя фоновым задачам продолжать работу.
 
-The application uses the native Windows lock screen through `LockWorkStation`. It does **not** implement a custom password screen and does **not** store Windows passwords or PINs.
+Приложение использует стандартный экран блокировки Windows через `LockWorkStation`. Оно **не** создаёт собственный экран ввода пароля и **не** хранит пароли или PIN-коды Windows.
 
-## Features
+## Возможности
 
-- Native Windows session locking with `LockWorkStation`
-- Optional prevention of automatic system sleep while the PC is locked
-- Optional prevention of display power-off
-- Configurable safety timer from 1 to 72 hours
-- Automatic stop of keep-awake mode after the Windows session is unlocked
-- Windows session-state monitoring through WTS APIs
-- Retry handling for temporary `SetThreadExecutionState` failures
-- Single-instance protection through a Windows mutex
-- Persistent settings stored next to the application
-- Optional diagnostic logging
-- Configurable log retention from 1 to 120 days
-- Rotating logs with strict size limits
-- Compact `diagnostic_context.json` and `last_problem.json` files designed for troubleshooting with ChatGPT/Codex
-- Automatic cleanup of old diagnostic files
-- No third-party Python packages required
+- Стандартная блокировка сеанса Windows через `LockWorkStation`
+- Опциональное предотвращение автоматического перехода системы в спящий режим, пока компьютер заблокирован
+- Опциональное предотвращение отключения экрана
+- Настраиваемый защитный таймер от 1 до 72 часов
+- Автоматическое отключение режима предотвращения сна после разблокировки сеанса Windows
+- Мониторинг состояния сеанса Windows через WTS API
+- Повторные попытки при временных сбоях `SetThreadExecutionState`
+- Защита от запуска нескольких экземпляров через Windows mutex
+- Постоянное хранение настроек рядом с приложением
+- Опциональное диагностическое логирование
+- Настраиваемый срок хранения логов от 1 до 120 дней
+- Ротация логов с жёсткими ограничениями по размеру
+- Компактные файлы `diagnostic_context.json` и `last_problem.json`, предназначенные для диагностики с помощью ChatGPT/Codex
+- Автоматическая очистка старых диагностических файлов
+- Не требует сторонних Python-пакетов
 
-## Why this exists
+## Зачем это нужно
 
-When Windows is locked normally, power settings may still put the computer to sleep. That can interrupt long-running background work such as downloads, video processing, translation, rendering, backups or other automated jobs.
+Даже при обычной блокировке Windows настройки электропитания могут перевести компьютер в спящий режим. Это способно прервать длительные фоновые задачи: загрузки, обработку видео, перевод, рендеринг, резервное копирование и другие автоматизированные процессы.
 
-Windows PC Locker can periodically reset the Windows idle timers while the session is locked. When the configured timer expires — or when the user unlocks Windows with automatic stop enabled — the application stops sending keep-awake signals and normal Windows power settings take control again.
+Windows PC Locker может периодически сбрасывать таймеры бездействия Windows, пока сеанс заблокирован. Когда заданный таймер истекает — или пользователь разблокирует Windows при включённой функции автоматической остановки — приложение прекращает отправлять сигналы поддержания активности, после чего снова начинают действовать обычные настройки электропитания Windows.
 
-## Requirements
+## Требования
 
-- Windows 10 or Windows 11
-- Python 3.10 or newer
+- Windows 10 или Windows 11
+- Python 3.10 или новее
 
-The program uses only the Python standard library and Windows APIs through `ctypes`.
+Программа использует только стандартную библиотеку Python и Windows API через `ctypes`.
 
-## Running
+## Запуск
 
 ```powershell
 pythonw computer_locker.pyw
 ```
 
-For troubleshooting from a console:
+Для диагностики из консоли:
 
 ```powershell
 python computer_locker.pyw
 ```
 
-## Safe self-test
+## Безопасный самотест
 
-The project includes a non-destructive self-test intended for CI and diagnostics:
+В проект встроен неразрушающий самотест, предназначенный для CI и диагностики:
 
 ```powershell
 python computer_locker.pyw --self-test
 ```
 
-The self-test checks that the required Windows APIs are available and reports storage/logging configuration. It does not lock the PC and does not intentionally enable keep-awake mode.
+Самотест проверяет доступность необходимых Windows API и выводит информацию о настройках хранения данных и логирования. Он не блокирует компьютер и намеренно не включает режим предотвращения сна.
 
-## Power options
+## Параметры питания
 
-### Prevent the computer from sleeping
+### Не переводить компьютер в спящий режим
 
-When enabled, the application periodically calls `SetThreadExecutionState` with `ES_SYSTEM_REQUIRED` while the safety timer is active.
+Когда эта опция включена, приложение периодически вызывает `SetThreadExecutionState` с флагом `ES_SYSTEM_REQUIRED`, пока активен защитный таймер.
 
-### Keep the monitor on
+### Не выключать монитор
 
-This is optional and disabled by default. Background applications generally do not need the display to remain powered on. Enable it only when required for a specific system or workflow.
+Это дополнительная функция, по умолчанию отключённая. Фоновым приложениям обычно не требуется, чтобы экран оставался включённым. Включайте её только тогда, когда это действительно нужно для конкретной системы или рабочего процесса.
 
-### Automatically allow sleep after unlock
+### Автоматически разрешать сон после разблокировки
 
-When enabled, the application watches the current Windows session state. After it has observed the locked state and then detects that the session is unlocked, keep-awake mode is stopped automatically.
+Когда эта функция включена, приложение отслеживает состояние текущего сеанса Windows. После того как программа зафиксирует состояние блокировки, а затем обнаружит разблокировку сеанса, режим предотвращения сна будет автоматически отключён.
 
-The normal Windows password/PIN screen is always responsible for authentication.
+За аутентификацию всегда отвечает стандартный экран пароля/PIN-кода Windows.
 
-## Settings and diagnostics
+## Настройки и диагностика
 
-Runtime data is deliberately stored next to the program:
+Рабочие данные намеренно хранятся рядом с программой:
 
 ```text
 Windows-PC-Locker/
@@ -90,45 +90,45 @@ Windows-PC-Locker/
    └─ last_problem.json
 ```
 
-These runtime folders are ignored by Git and should not be committed.
+Эти рабочие папки игнорируются Git и не должны добавляться в репозиторий.
 
-### Diagnostic limits
+### Ограничения диагностики
 
-The application is designed to keep diagnostic data compact:
+Приложение спроектировано так, чтобы диагностические данные оставались компактными:
 
-- logging can be disabled completely;
-- retention can be configured from 1 to 120 days;
-- one rotating log file is limited to 256 KB;
-- two rotated backups are retained;
-- the entire diagnostic directory is limited to approximately 1 MB;
-- `diagnostic_context.json` is overwritten instead of growing indefinitely;
-- `last_problem.json` keeps only the latest significant problem;
-- stored traceback text is length-limited;
-- damaged settings backups are also cleaned up and limited in count.
+- логирование можно полностью отключить;
+- срок хранения можно настроить от 1 до 120 дней;
+- размер одного ротируемого лог-файла ограничен 256 КБ;
+- сохраняются две резервные копии логов;
+- общий размер каталога диагностики ограничен примерно 1 МБ;
+- `diagnostic_context.json` перезаписывается, а не растёт бесконечно;
+- `last_problem.json` хранит только последнюю значимую проблему;
+- длина сохраняемого traceback ограничена;
+- резервные копии повреждённых настроек также автоматически очищаются и ограничиваются по количеству.
 
-If a problem occurs, the most useful files to provide for diagnosis are the contents of `Логи проблем`.
+Если возникает проблема, наиболее полезные для диагностики файлы находятся в папке `Логи проблем`.
 
-## Data and privacy
+## Данные и конфиденциальность
 
-- The application does not store a separate unlock password.
-- It does not replace the Windows lock screen.
-- Authentication remains fully handled by Windows.
-- No network connection or online service is required by the application itself.
-- Settings and diagnostics remain in folders next to the program.
+- Приложение не хранит отдельный пароль для разблокировки.
+- Оно не заменяет стандартный экран блокировки Windows.
+- Аутентификация полностью выполняется средствами Windows.
+- Самому приложению не требуется подключение к интернету или онлайн-сервисам.
+- Настройки и диагностические данные остаются в папках рядом с программой.
 
 ## GitHub Actions
 
-The repository includes a Windows GitHub Actions workflow that performs:
+В репозитории есть workflow GitHub Actions для Windows, который выполняет:
 
-1. Python syntax compilation of `computer_locker.pyw`.
-2. The built-in safe `--self-test` on a Windows runner.
+1. Проверку синтаксиса `computer_locker.pyw` средствами Python.
+2. Встроенный безопасный `--self-test` на Windows runner.
 
-## Project status
+## Статус проекта
 
-Current application version: **2.3 SAFE**
+Текущая версия приложения: **2.3 SAFE**
 
-The application has been manually tested on Windows for its normal lock/unlock workflow. GitHub Actions provides additional automated syntax and self-test verification, but it cannot reproduce every real desktop power-management configuration.
+Приложение вручную протестировано в Windows для обычного сценария блокировки и разблокировки. GitHub Actions дополнительно проверяет синтаксис и выполняет самотест, однако не может воспроизвести все возможные реальные конфигурации управления питанием рабочего компьютера.
 
-## License
+## Лицензия
 
-No open-source license is currently granted. The source code is published for portfolio and code-review purposes.
+В настоящее время лицензия с открытым исходным кодом не предоставляется. Исходный код опубликован для портфолио и ревью кода.
