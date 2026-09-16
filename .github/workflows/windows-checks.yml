@@ -21,6 +21,7 @@ concurrency:
 jobs:
   verify:
     runs-on: windows-latest
+    timeout-minutes: 15
     env:
       PYTHONUTF8: "1"
       PYTHONIOENCODING: "utf-8"
