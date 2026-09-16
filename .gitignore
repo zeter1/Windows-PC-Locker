@@ -9,10 +9,16 @@ __pycache__/
 venv/
 env/
 
-# Build output
+# Reproducible build workspace and caches
+.build/
+.build-cache/
 build/
 dist/
+dist_previous/
 *.spec
+
+# Build diagnostics
+build_logs/
 
 # Runtime data created next to the application
 Настройки программы/

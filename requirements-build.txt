@@ -1,0 +1,4 @@
+# Pinned build-only dependencies for reproducible Windows packaging.
+# Runtime application has no third-party Python dependencies.
+pyinstaller==6.22.3
+pyinstaller-hooks-contrib==2026.6
