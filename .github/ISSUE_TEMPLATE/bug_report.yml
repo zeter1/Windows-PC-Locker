@@ -1,0 +1,68 @@
+name: Сообщить об ошибке
+description: Сообщение о проблеме Windows PC Locker
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Спасибо за сообщение. Для системных проблем особенно важны версия Windows, настройки питания и точный сценарий блокировки/разблокировки.
+        Не публикуйте личные пути и другую информацию из диагностических файлов без предварительной проверки.
+
+  - type: input
+    id: version
+    attributes:
+      label: Версия программы
+      placeholder: "например: 2.3 SAFE"
+    validations:
+      required: true
+
+  - type: input
+    id: windows_version
+    attributes:
+      label: Windows
+      placeholder: "например: Windows 11 24H2"
+    validations:
+      required: true
+
+  - type: textarea
+    id: power_settings
+    attributes:
+      label: Настройки режима
+      description: Укажите таймер, предотвращение сна, предотвращение отключения монитора и автоотключение после разблокировки.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Что произошло
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Как воспроизвести
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Ожидаемое поведение
+    validations:
+      required: true
+
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Диагностика
+      description: Приложите безопасное содержимое `last_problem.json`, `diagnostic_context.json` или релевантный фрагмент лога.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Проверки
+      options:
+        - label: Я проверил проблему на текущей версии проекта.
+          required: true
+        - label: Я понимаю, что приложение использует стандартный экран блокировки Windows и не управляет паролем/PIN.
+          required: true
