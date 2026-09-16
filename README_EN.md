@@ -66,6 +66,24 @@ With a visible console for diagnostics:
 python computer_locker.pyw
 ```
 
+## Build EXE
+
+Run the repository build helper:
+
+```text
+build_exe.bat
+```
+
+The script creates an isolated `.build-venv`, updates the build tooling, installs a compatible PyInstaller version, removes stale build artifacts, builds the application, and runs the **safe self-test against the packaged executable itself**. It does not install build packages into the project's global Python environment.
+
+Output:
+
+```text
+dist\Windows-PC-Locker.exe
+```
+
+This is a `onefile` build, so the target PC does not need Python installed. By application design, settings and diagnostics are stored next to the executable; keep the EXE in a directory where the user has write access.
+
 ## Usage
 
 1. Start the application.
@@ -133,7 +151,7 @@ python -m py_compile computer_locker.pyw
 python computer_locker.pyw --self-test
 ```
 
-GitHub Actions runs the same safe checks on a Windows runner. CI does not verify a real lock/unlock cycle in an interactive user session.
+GitHub Actions runs the same safe checks on a Windows runner. For packaging changes, CI additionally runs `build_exe.bat --ci` and executes the packaged EXE self-test. CI does not verify a real lock/unlock cycle in an interactive user session.
 
 ## Support and security
 

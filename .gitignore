@@ -5,12 +5,14 @@ __pycache__/
 
 # Virtual environments
 .venv/
+.build-venv/
 venv/
 env/
 
 # Build output
 build/
 dist/
+*.spec
 
 # Runtime data created next to the application
 Настройки программы/
