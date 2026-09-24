@@ -6,6 +6,15 @@
 
 Программа не создаёт собственный экран пароля, не хранит PIN-коды и не заменяет безопасность Windows. За вход после блокировки отвечает стандартный экран Windows.
 
+## Скачать готовую Windows-версию
+
+Готовый **`Windows-PC-Locker.exe`** и portable ZIP публикуются на странице [GitHub Releases](https://github.com/zeter1/Windows-PC-Locker/releases).
+
+Для готового EXE установленный Python не нужен. Можно скачать один `Windows-PC-Locker.exe` либо `Windows-PC-Locker-portable-x64.zip`. Рядом публикуется `SHA256SUMS.txt`.
+
+Перед публикацией GitHub Actions запускает безопасный self-test, собирает EXE и повторно выполняет self-test уже packaged-бинарника. Тест не блокирует CI-компьютер.
+
+
 ## Что демонстрирует проект
 
 - прямую интеграцию с WinAPI через `ctypes` без сторонних runtime-зависимостей;
