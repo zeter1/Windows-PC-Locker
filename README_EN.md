@@ -6,6 +6,16 @@
 
 The application does not implement its own password screen, store PIN codes, or replace Windows security. Authentication after locking is handled by the standard Windows lock screen.
 
+## Download and run on Windows
+
+> Windows builds are marked **Prerelease**: they are preliminary builds for testing. A release build may differ from the current source.
+
+1. Open [GitHub Releases](https://github.com/zeter1/Windows-PC-Locker/releases) and expand **Assets** for the build you choose.
+2. Download `Windows-PC-Locker.exe` or extract `Windows-PC-Locker-portable-x64.zip`.
+3. Place the program in a folder you can write to and run `Windows-PC-Locker.exe`.
+
+The EXE includes Python. Settings and logs are stored beside the program. Unlocking uses standard Windows authentication. `SHA256SUMS.txt` is published beside the files. The CI self-test does not lock the machine or verify an interactive lock/unlock session.
+
 ## What the project demonstrates
 
 - direct WinAPI integration through `ctypes` without third-party runtime dependencies;
@@ -38,7 +48,7 @@ Locking Windows does not guarantee that the machine will remain awake according 
 
 Windows PC Locker allows the session to be locked while temporarily keeping the system active without bypassing standard Windows authentication.
 
-## Installation
+## Installation from source
 
 The application uses only the Python standard library and Windows APIs through `ctypes`.
 
@@ -52,7 +62,7 @@ cd Windows-PC-Locker
 
 No additional Python packages are required.
 
-## Launch
+## Launch from source
 
 Without a console window:
 
